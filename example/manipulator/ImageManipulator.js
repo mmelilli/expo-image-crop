@@ -175,9 +175,9 @@ class ExpoImageManipulator extends Component {
 
     getCropBounds = (actualWidth, actualHeight) => {
         const imageRatio = actualHeight / actualWidth
-        let originalHeight = Dimensions.get('window').height - 64
+        let originalHeight = Dimensions.get('window').height - 214
         if (isIphoneX()) {
-            originalHeight = Dimensions.get('window').height - 122
+            originalHeight = Dimensions.get('window').height - 272
         }
         const renderedImageWidth = imageRatio < (originalHeight / width) ? width : originalHeight / imageRatio
         const renderedImageHeight = imageRatio < (originalHeight / width) ? width * imageRatio : originalHeight
@@ -296,7 +296,6 @@ class ExpoImageManipulator extends Component {
             allowFlip = true,
             btnTexts,
             fixedMask,
-            ratio,
         } = this.props
         const {
             uri,
@@ -306,9 +305,9 @@ class ExpoImageManipulator extends Component {
         } = this.state
 
         const imageRatio = this.actualSize.height / this.actualSize.width
-        let originalHeight = Dimensions.get('window').height - 64
+        let originalHeight = Dimensions.get('window').height - 214
         if (isIphoneX()) {
-            originalHeight = Dimensions.get('window').height - 122
+            originalHeight = Dimensions.get('window').height - 272
         }
 
         const cropRatio = originalHeight / width
@@ -328,37 +327,26 @@ class ExpoImageManipulator extends Component {
             this.currentPos.left = cropInitialLeft
         }
         return (
-            <Modal
-                animationType="slide"
-                transparent
-                visible={isVisible}
-                hardwareAccelerated
-                onRequestClose={() => {
-                    this.onToggleModal()
+            <View
+                style={{
                 }}
             >
                 <SafeAreaView
                     style={{
-                        width, flexDirection: 'row', backgroundColor: 'black', justifyContent: 'space-between',
+                        width, flexDirection: 'row', backgroundColor: "transparent", justifyContent: 'space-between',
                     }}
                 >
                     <ScrollView scrollEnabled={false}
                         horizontal
                         contentContainerStyle={{
-                            width: '100%', paddingHorizontal: 15, height: 44, alignItems: 'center',
+                            width: '100%', paddingHorizontal: 0, height: 44, alignItems: 'center',
                         }}
                     >
                         {!cropMode
                             ? (
-                                <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity onPress={() => this.onToggleModal()}
-                                        style={{
-                                            width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
-                                        }}
-                                    >
-                                        <Icon size={24} name="arrow-left" color="white" />
-                                    </TouchableOpacity>
-                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                <View style={{ flexDirection: 'row'}}>
+
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                                         <TouchableOpacity onPress={() => this.setState({ cropMode: true })}
                                             style={{
                                                 marginLeft: 10, width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
@@ -415,13 +403,6 @@ class ExpoImageManipulator extends Component {
                             )
                             : (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <TouchableOpacity onPress={() => this.setState({ cropMode: false })}
-                                        style={{
-                                            width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
-                                        }}
-                                    >
-                                        <Icon size={24} name="arrow-left" color="white" />
-                                    </TouchableOpacity>
                                     <TouchableOpacity onPress={() => this.onCropImage()}
                                         style={{
                                             marginRight: 10, alignItems: 'flex-end', flex: 1,
@@ -440,7 +421,7 @@ class ExpoImageManipulator extends Component {
                 <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
                     <ScrollView
                         style={{ position: 'relative', flex: 1 }}
-                        contentContainerStyle={{ backgroundColor: 'black' }}
+                        contentContainerStyle={{ backgroundColor: 'transparent' }}
                         maximumZoomScale={5}
                         minimumZoomScale={0.5}
                         onScroll={this.onHandleScroll}
@@ -455,7 +436,7 @@ class ExpoImageManipulator extends Component {
                         // pinchGestureEnabled={cropMode ? false : pinchGestureEnabled}
                     >
                         <AutoHeightImage
-                            style={{ backgroundColor: 'black' }}
+                            style={{ backgroundColor: 'transparent' }}
                             source={{ uri }}
                             resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
                             width={width}
@@ -477,13 +458,12 @@ class ExpoImageManipulator extends Component {
                                 minHeight={(fixedMask && fixedMask.height) || 100}
                                 minWidth={(fixedMask && fixedMask.width) || 100}
                                 borderColor={borderColor}
-                                ratio={ratio || {ratio: {height: null, width: null, }}}
                             />
                         )
                         }
                     </ScrollView>
                 </View>
-            </Modal>
+            </View>
         )
     }
 }
@@ -516,5 +496,4 @@ ExpoImageManipulator.propTypes = {
     saveOptions: PropTypes.object,
     photo: PropTypes.object.isRequired,
     onToggleModal: PropTypes.func.isRequired,
-    ratio: PropTypes.object,
 }
