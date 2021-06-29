@@ -3,7 +3,7 @@ import {
     Dimensions,
     Image,
     ScrollView,
-    Modal,
+    Button,
     View,
     Text,
     SafeAreaView,
@@ -326,6 +326,9 @@ class ExpoImageManipulator extends Component {
             this.currentPos.top = cropInitialTop
             this.currentPos.left = cropInitialLeft
         }
+
+        const saveButton = this.props.saveButton;
+
         return (
             <View
                 style={{
@@ -388,13 +391,13 @@ class ExpoImageManipulator extends Component {
                                                     >
                                                         <MaterialIcon size={20} name="flip" color="white" />
                                                     </TouchableOpacity>
-                                                    <TouchableOpacity onPress={() => { onPictureChoosed({ uri, base64 }); this.onToggleModal() }}
+                                                    {!saveButton && <TouchableOpacity onPress={() => { onPictureChoosed({ uri, base64 }); this.onToggleModal() }}
                                                         style={{
                                                             marginLeft: 10, width: 60, height: 32, alignItems: 'center', justifyContent: 'center',
                                                         }}
                                                     >
-                                                        <Text style={{ fontWeight: '500', color: 'white', fontSize: 18 }}>{btnTexts.done}</Text>
-                                                    </TouchableOpacity>
+                                                         <Text style={{ fontWeight: '500', color: 'white', fontSize: 18 }}>{btnTexts.done}</Text>
+                                                    </TouchableOpacity>}
                                                 </View>
                                             )
                                         }
@@ -403,6 +406,13 @@ class ExpoImageManipulator extends Component {
                             )
                             : (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <TouchableOpacity onPress={() => this.setState({ cropMode: false })}
+                                        style={{
+                                            width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Icon size={24} name="arrow-left" color="white" />
+                                    </TouchableOpacity>
                                     <TouchableOpacity onPress={() => this.onCropImage()}
                                         style={{
                                             marginRight: 10, alignItems: 'flex-end', flex: 1,
@@ -462,6 +472,9 @@ class ExpoImageManipulator extends Component {
                         )
                         }
                     </ScrollView>
+                    {!cropMode && saveButton &&
+                        React.cloneElement(saveButton, { onPress : () => { onPictureChoosed({ uri, base64 }); this.onToggleModal() }})
+                    }
                 </View>
             </View>
         )
